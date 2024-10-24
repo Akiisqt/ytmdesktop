@@ -66,7 +66,7 @@ export default class DiscordPresence implements IIntegration {
 
   private connectionRetries: number = 0;
 
-  private setActivity() {
+  private UpdateActivity() {
     if (this.activityDebounceTimeout) return;
     this.activityDebounceTimeout = setTimeout(() => {
       if (!this.videoDetails) {
@@ -123,7 +123,7 @@ export default class DiscordPresence implements IIntegration {
       hasFullMetadata &&
       (oldState !== this.videoState || oldId !== this.videoDetails.id || Math.abs(this.progress - oldProgress) > 1 || oldProgress > this.progress)
     ) {
-      this.setActivity();
+      this.UpdateActivity();
     }
 
     clearTimeout(this.pauseTimeout);
