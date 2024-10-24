@@ -104,11 +104,7 @@ export default class DiscordPresence implements IIntegration {
       this.activityDebounceTimeout = null;
     }, 1000);
   }
-
-  private shouldSetActivity(oldState: VideoState | null, oldId: string | null, oldProgress: number | null): boolean {
-    return oldState !== this.videoState || oldId !== this.videoDetails.id || Math.abs(this.progress - oldProgress) > 1 || oldProgress > this.progress;
-  }
-
+  
   private playerStateChanged(state: PlayerState) {
     if (!this.ready) return;
 
@@ -123,7 +119,12 @@ export default class DiscordPresence implements IIntegration {
     this.videoState = trackState;
     this.videoDetails = videoDetails;
     this.progress = Math.floor(videoProgress);
-    if (hasFullMetadata && this.shouldSetActivity(oldState, oldId, oldProgress)) this.setActivity();
+    if (
+      hasFullMetadata &&
+      (oldState !== this.videoState || oldId !== this.videoDetails.id || Math.abs(this.progress - oldProgress) > 1 || oldProgress > this.progress)
+    ) {
+      this.setActivity();
+    }
 
     clearTimeout(this.pauseTimeout);
     this.pauseTimeout = null;
